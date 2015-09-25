@@ -1,5 +1,8 @@
 #ifndef _H_OBJECT_LOADER
 #define _H_OBJECT_LOADER
+
+#include "common.h"
+
 class CObjectLoader
 {
 public:
@@ -11,4 +14,5 @@ public:
 private:
 
 };
+
 #endif

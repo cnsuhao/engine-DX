@@ -3,38 +3,97 @@
 
 #include "common.h"
 #include "ObjectLoader.h";
+#include "camera.h"
 
-// define the screen resolution
-#define SCREEN_WIDTH  800
-#define SCREEN_HEIGHT 600
+//effects constant buffer's structure
+struct cbPerObject
+{
+	XMMATRIX  WVP;
+};
+
+//Vertex Structure
+struct Vertex
+{
+	Vertex(){}
+	Vertex(float x, float y, float z,			//position
+		float cr, float cg, float cb, float ca)	//color
+		: pos(x,y,z), color(cr, cg, cb, ca){}
+
+	XMFLOAT3 pos;
+	XMFLOAT4 color;
+};
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 class CMainGame
 {
 public:
-	CMainGame(){};
+	CMainGame()
+	{
+		swapchain = NULL;
+		dev = NULL;         
+		devcon = NULL;    
+		renderTargetView = NULL;
+		squareIndexBuffer = NULL;
+		depthStencilView = NULL;
+		depthStencilBuffer = NULL;
+		squareVertBuffer = NULL;
+		VS = NULL;
+		PS = NULL;
+		VS_Buffer = NULL;
+		PS_Buffer = NULL;
+		vertLayout = NULL;
+		cbPerObjectBuffer = NULL;
+	};
+
 	~CMainGame(){};
 	
-	void Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	void Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	void InitD3D(HWND hWnd);    // sets up and initializes Direct3D
-	void UnInit();
+	//maingame starts here
+	void Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);	
+	//Create a window
+	void InitWindow(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+	// sets up and initializes Direct3D
+	void InitD3D(HWND hWnd);
+	void UnInitD3D();
+	void InitScene();
+	void UpdateScene();
 	void GameLoop();
-	void RenderFrame();
-	void RenderText();
+	void DrawScene();
 
 
 private:
+	//Window
+	HWND hWnd;
+
+	//result handle
+	HRESULT hr;
+
 	//Object
 	CObjectLoader ObjLoader;
+	CCamera FixedCamera;
 	
-	//D3D
-	IDXGISwapChain *swapchain;             // the pointer to the swap chain interface
-	ID3D11Device *dev;                     // the pointer to our Direct3D device interface
-	ID3D11DeviceContext *devcon;           // the pointer to our Direct3D device context
-	ID3D11RenderTargetView *backbuffer;    // the pointer to our back buffer
+	//effects constant buffer
+	cbPerObject cbPerObj;
 
+	//D3D
+	IDXGISwapChain *swapchain;					// the pointer to the swap chain interface
+	ID3D11Device *dev;							// the pointer to our Direct3D device interface
+	ID3D11DeviceContext *devcon;				// the pointer to our Direct3D device context
+	ID3D11RenderTargetView *renderTargetView;   // the pointer to our back buffer
+	ID3D11Buffer* squareIndexBuffer;
+	ID3D11DepthStencilView* depthStencilView;
+	ID3D11Texture2D* depthStencilBuffer;
+	ID3D11Buffer* squareVertBuffer;
+	ID3D11VertexShader* VS;
+	ID3D11PixelShader* PS;
+	ID3D10Blob* VS_Buffer;
+	ID3D10Blob* PS_Buffer;
+	ID3D11InputLayout* vertLayout;
+	ID3D11Buffer* cbPerObjectBuffer;
+
+	//space matrix
+	XMMATRIX WVP;
+	XMMATRIX World;
 };
 #endif
 

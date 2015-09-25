@@ -8,5 +8,13 @@
 #include <d3dx11.h>
 #include "DXUT.h"
 #include "SDKmisc.h"
+#include <vector> 
+#include <fstream> 
+#include <istream> 
+#include <xnamath.h> 
+
+// define the screen resolution
+#define SCREEN_WIDTH  800
+#define SCREEN_HEIGHT 600
 
 #endif
