@@ -11,4 +11,4 @@ void CCamera::Init()
 
 	//Set the Projection matrix
 	camProjection = XMMatrixPerspectiveFovLH( 0.4f*3.14f, SCREEN_WIDTH/SCREEN_HEIGHT, 1.0f, 1000.0f);
-}
+} 
